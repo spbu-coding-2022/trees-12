@@ -79,21 +79,7 @@ Technologies used to develop the project:
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To start working with our development, you need to follow these steps:
-
-### Prerequisites
-
-Install JUnit - programmer-friendly testing framework for Java and the JVM.
-
-* npm
-
-  ```sh
-  npm install junit
-  ```
-
-### Clone Repository
-
-Clone repository to start local development.
+To start working with our development, you need to clone repository:
 
 * git
 
