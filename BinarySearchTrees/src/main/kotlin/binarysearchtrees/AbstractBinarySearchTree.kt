@@ -3,15 +3,21 @@ package binarysearchtrees
 abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree<K, V> {
     override var size: Int = 0
     protected var root: Vertex<K, V>? = null
+    protected var modCount: Int = 0
 
     override fun isEmpty(): Boolean = (root == null)
 
     override fun clear() {
         size = 0
         root = null
+        ++modCount
     }
 
     override fun getRoot(): BinarySearchTree.MutableVertex<K, V>? = root
+
+    override fun iterator(): Iterator<BinarySearchTree.MutableVertex<K, V>> {
+        return BinarySearchTreeIterator<K, V>(getRoot()) { modCount }
+    }
 
     override fun get(key: K): V? {
         var vertex = root
@@ -44,7 +50,12 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
                 }
             }
         }
+        ++modCount
         return if (f) null else vertex.setValue(value)
+    }
+
+    override fun set(key: K, value: V) {
+        put(key, value)
     }
 
     override fun remove(key: K): V? {
@@ -68,6 +79,7 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
                 parent.right = vertex?.let { removeVertex(it) }
             }
         }
+        ++modCount
         return oldValue
     }
 
@@ -82,6 +94,7 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
                 vertex = vertex.right
             }
         }
+        ++modCount
         return if (vertex?.value == value) {
             if (parent == null) {
                 root = vertex?.let { removeVertex(it) }
@@ -128,5 +141,43 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
         override var right: Vertex<K, V>? = null
     ) : BinarySearchTree.MutableVertex<K, V> {
         override fun setValue(newValue: V): V = value.also { value = newValue }
+    }
+
+    protected class BinarySearchTreeIterator<K, V>(
+        root: BinarySearchTree.MutableVertex<K, V>?,
+        private val getModCount: () -> Int
+    ) : Iterator<BinarySearchTree.MutableVertex<K, V>> {
+        private val stack: MutableList<BinarySearchTree.MutableVertex<K, V>> = mutableListOf()
+        private val expectedModCount: Int = getModCount()
+
+        init {
+            var vertex = root
+            while (vertex != null) {
+                stack.add(vertex)
+                vertex = vertex.left
+            }
+        }
+
+        override fun hasNext(): Boolean {
+            if (expectedModCount != getModCount()) {
+                throw ConcurrentModificationException()
+            } else {
+                return stack.isNotEmpty()
+            }
+        }
+
+        override fun next(): BinarySearchTree.MutableVertex<K, V> {
+            if (expectedModCount != getModCount()) {
+                throw ConcurrentModificationException()
+            } else {
+                val vertex = stack.removeLast()
+                var nextVertex = vertex.right
+                while (nextVertex != null) {
+                    stack.add(nextVertex)
+                    nextVertex = nextVertex.left
+                }
+                return vertex
+            }
+        }
     }
 }
