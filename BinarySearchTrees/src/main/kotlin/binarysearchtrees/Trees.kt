@@ -15,24 +15,3 @@ fun <K : Comparable<K>, V> binarySearchTreeOf(
     }
     return tree
 }
-
-// extension functions
-
-fun <K : Comparable<K>, V> BinarySearchTree<K, V>.forEach(action: (BinarySearchTree.MutableVertex<K, V>) -> Unit) {
-    fun traversalInOrder(vertex: BinarySearchTree.MutableVertex<K, V>?) {
-        if (vertex == null) {
-            return
-        } else {
-            traversalInOrder(vertex.left)
-            action(vertex)
-            traversalInOrder(vertex.right)
-        }
-    }
-    traversalInOrder(this.getRoot())
-}
-
-fun <K : Comparable<K>, V> BinarySearchTree<K, V>.toList(): List<Pair<K, V>> {
-    val list = mutableListOf<Pair<K, V>>()
-    this.forEach { list.add(Pair(it.key, it.value)) }
-    return list
-}
