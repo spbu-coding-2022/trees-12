@@ -28,6 +28,13 @@ class AbstractBinarySearchTreeTest {
     @Test
     fun `Function put adds all elements with unique keys`() {
         values.forEach { tree.put(it.first, it.second) }
-        assertEquals(values.reversed().distinctBy { it.first }.sortedBy { it.first }, tree.toList())
+        val listOfPairKeyValue = mutableListOf<Pair<Int, Int>>()
+        for (it in tree) {
+            listOfPairKeyValue.add(Pair(it.key, it.value))
+        }
+        assertEquals(
+            values.reversed().distinctBy { it.first }.sortedBy { it.first },
+            listOfPairKeyValue
+        )
     }
 }
