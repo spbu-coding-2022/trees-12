@@ -67,4 +67,65 @@ class AbstractBinarySearchTreeTest {
         iterator = tree.iterator()
         assertThrows(NoSuchElementException::class.java) { iterator.next() }
     }
+
+    @ParameterizedTest(name = "Function get returns correct value for key {0}")
+    @ValueSource(ints = [9, 20, 32, 81, 77, 94, -10, -15])
+    fun `Function get returns correct value`(key: Int) {
+        values.forEach { tree.put(it.first, it.second) }
+
+        val expected = key * 198
+        tree[key] = expected
+        assertEquals(expected, tree.get(key))
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [9, 20, 32, 81, 77, 94, -10, -15])
+    fun `Function remove deletes the element correctly`(key: Int) {
+        values.forEach { tree.put(it.first, it.second) }
+
+        var value = key * 198
+        tree[key] = value
+        assertEquals(value, tree.remove(key))
+        assertEquals(null, tree.remove(key))
+        assertEquals(null, tree[key])
+        assertTrue(isBinarySearchTree(tree))
+
+        value = key * 95
+        tree[key] = value
+        assertFalse(tree.remove(key, value + 10))
+        assertTrue(tree.remove(key, value))
+        assertEquals(null, tree[key])
+        assertTrue(isBinarySearchTree(tree))
+    }
+
+    @Test
+    fun `Function remove deletes the root element correctly`() {
+        values.forEach { tree.put(it.first, it.second) }
+
+        val value = 45
+        var oldKey = tree.getRoot()?.let {
+            it.setValue(value)
+            it.key
+        } ?: -25
+        assertEquals(value, tree.remove(oldKey))
+        assertNotEquals(oldKey, tree.getRoot()?.key)
+        assertTrue(isBinarySearchTree(tree))
+
+        oldKey = tree.getRoot()?.let {
+            it.setValue(value)
+            it.key
+        } ?: -25
+        assertTrue(tree.remove(oldKey, value))
+        assertNotEquals(oldKey, tree.getRoot()?.key)
+        assertTrue(isBinarySearchTree(tree))
+    }
+
+    @Test
+    fun `Function clear makes tree empty`() {
+        values.forEach { tree.put(it.first, it.second) }
+
+        tree.clear()
+        assertTrue(tree.isEmpty())
+        assertEquals(0, tree.size)
+    }
 }
