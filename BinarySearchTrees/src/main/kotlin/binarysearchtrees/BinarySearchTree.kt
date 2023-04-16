@@ -13,9 +13,13 @@ interface BinarySearchTree<K : Comparable<K>, V> {
 
     fun put(key: K, value: V): V?
 
+    operator fun set(key: K, value: V)
+
     fun remove(key: K): V?
 
     fun remove(key: K, value: V): Boolean
+
+    operator fun iterator(): Iterator<MutableVertex<K, V>>
 
     //for extension functions like all, any, ...
     interface Vertex<K, V> {
