@@ -140,7 +140,7 @@ class AbstractRedBlackTreeTest {
         assertEquals(value, tree.remove(oldKey))
         assertNotEquals(oldKey, tree.getRoot()?.key)
         assertEquals(size, tree.size)
-        assertTrue(isBinarySearchTree(tree))
+        assertTrue(isRedBlackTree(tree))
 
         oldKey = tree.getRoot()?.let {
             it.setValue(value)
@@ -150,7 +150,7 @@ class AbstractRedBlackTreeTest {
         assertTrue(tree.remove(oldKey, value))
         assertNotEquals(oldKey, tree.getRoot()?.key)
         assertEquals(size, tree.size)
-        assertTrue(isBinarySearchTree(tree))
+        assertTrue(isRedBlackTree(tree))
     }
 
     @Test
