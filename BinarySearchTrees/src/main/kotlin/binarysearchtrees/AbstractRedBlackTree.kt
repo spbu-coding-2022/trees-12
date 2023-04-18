@@ -384,7 +384,7 @@ abstract class AbstractRedBlackTree<K : Comparable<K>, V> : RedBlackTree<K, V> {
                         if (leftCousin.color == red) {
                             notEnd = false
                             leftCousin.color = black
-                            rotateLeft(parent, brother)
+                            rotateRight(parent, brother)
                         } else {
                             brother.right?.let { rightCousin ->
                                 if (rightCousin.color == red) {
