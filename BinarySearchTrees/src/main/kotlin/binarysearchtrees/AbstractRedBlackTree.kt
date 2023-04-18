@@ -233,18 +233,27 @@ abstract class AbstractRedBlackTree<K : Comparable<K>, V> : RedBlackTree<K, V> {
                 vertex.right = next.right
                 if (nextParent == vertex) {
                     next.right = vertex
+                    vertex.right?.let { right ->
+                        // swap with the single red leaf
+                        vertex.color = right.color.also { right.color = vertex.color }
+                        next.right = right
+                        right.left = vertex
+                        vertex.left = null
+                        vertex.right = null
+                        stack.add(right)
+                    }
                 } else {
                     next.right = right
                     nextParent.left = vertex
-                }
-                vertex.right?.let { right ->
-                    // swap with the single red leaf
-                    vertex.color = right.color.also { right.color = vertex.color }
-                    next.right = right
-                    right.left = vertex
-                    vertex.left = null
-                    vertex.right = null
-                    stack.add(right)
+                    vertex.right?.let { right ->
+                        // swap with the single red leaf
+                        vertex.color = right.color.also { right.color = vertex.color }
+                        nextParent.left = right
+                        right.left = vertex
+                        vertex.left = null
+                        vertex.right = null
+                        stack.add(right)
+                    }
                 }
                 vertex
             } ?: left.let { left ->
