@@ -50,8 +50,11 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
                 }
             }
         }
-        ++modCount
-        return if (f) null else vertex.setValue(value)
+        return if (f) {
+            ++size
+            ++modCount
+            null
+        } else vertex.setValue(value)
     }
 
     override fun set(key: K, value: V) {
@@ -70,16 +73,19 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
             }
         }
         val oldValue = vertex?.value
-        if (parent == null) {
-            root = vertex?.let { removeVertex(it) }
-        } else {
-            if (parent.left == vertex) {
-                parent.left = vertex?.let { removeVertex(it) }
+        if (vertex != null) {
+            if (parent == null) {
+                root = vertex.let { removeVertex(it) }
             } else {
-                parent.right = vertex?.let { removeVertex(it) }
+                if (parent.left == vertex) {
+                    parent.left = vertex.let { removeVertex(it) }
+                } else {
+                    parent.right = vertex.let { removeVertex(it) }
+                }
             }
+            --size
+            ++modCount
         }
-        ++modCount
         return oldValue
     }
 
@@ -94,7 +100,6 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
                 vertex = vertex.right
             }
         }
-        ++modCount
         return if (vertex?.value == value) {
             if (parent == null) {
                 root = vertex?.let { removeVertex(it) }
@@ -105,6 +110,8 @@ abstract class AbstractBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree
                     parent.right = vertex?.let { removeVertex(it) }
                 }
             }
+            --size
+            ++modCount
             true
         } else false
     }
