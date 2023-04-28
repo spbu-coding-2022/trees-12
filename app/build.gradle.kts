@@ -1,5 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.8.20"
     jacoco
     application
 }
@@ -14,7 +15,16 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:5.9.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    implementation("org.neo4j:neo4j-ogm-core:4.0.5")
+    implementation("org.neo4j:neo4j-ogm-bolt-driver:4.0.5")
+
     implementation(project(":BinarySearchTrees"))
+}
+
+noArg {
+    annotation("org.neo4j.ogm.annotation.NodeEntity")
+    annotation("org.neo4j.ogm.annotation.RelationshipEntity")
 }
 
 tasks.test {
