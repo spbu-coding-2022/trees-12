@@ -5,7 +5,7 @@ import binarysearchtrees.binarysearchtree.Vertex as PublicVertex
 
 open class SimpleBinarySearchTree<K : Comparable<K>, V> : BinarySearchTree<K, V> {
     final override var size: Int = 0
-        private set
+        protected set
     protected var root: Vertex<K, V>? = null
     protected var modCount: Int = 0
 
