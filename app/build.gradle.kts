@@ -18,6 +18,7 @@ dependencies {
 
     implementation("org.neo4j:neo4j-ogm-core:4.0.5")
     implementation("org.neo4j:neo4j-ogm-bolt-driver:4.0.5")
+    implementation("org.slf4j:slf4j-simple:2.0.0")
 
     implementation(project(":BinarySearchTrees"))
 }
