@@ -7,7 +7,7 @@ import org.neo4j.ogm.annotation.*
 import org.neo4j.ogm.config.Configuration
 import org.neo4j.ogm.session.SessionFactory
 
-class RBTRepo<ValueType>(
+class RBTRepository<ValueType>(
     configuration: Configuration,
     private val serializeValue: (ValueType) -> String,
     private val deserializeValue: (String) -> ValueType
