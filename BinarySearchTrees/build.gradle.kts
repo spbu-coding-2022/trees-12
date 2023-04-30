@@ -27,6 +27,13 @@ tasks.test {
 
 tasks.named<JacocoReport>("jacocoTestReport") {
     dependsOn(tasks.test)
+
+    classDirectories.setFrom(files(classDirectories.files.map {
+        fileTree(it) {
+            exclude("**/binarysearchtrees/TreesKt.*")
+        }
+    }))
+
     reports {
         xml.required.set(false)
         html.required.set(true)
