@@ -9,9 +9,6 @@ mergeable:
         begins_with:
           match: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
           message: "The name must begin with a capital letter."
-        ends_with:
-          match: '.'
-          message: "The name must end with a dot."
 
       - do: description
         no_empty:
