@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/spbu-coding-2022/trees-12">
-    <img src="https://media.discordapp.net/attachments/760917929126133834/1092515552280461312/96f57df025f85c16.png" alt="Logo" width="80" height="80">
+    <img src="https://media.discordapp.net/attachments/760917929126133834/1102646230024192051/image.png?width=320&height=320" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Search Trees Project</h3>
@@ -38,7 +38,7 @@
         <li><a href="#clone-repository">Clone Repository</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#app-usage">App Usage</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -87,16 +87,10 @@ To start working with our development, you need to clone repository:
   git clone https://github.com/spbu-coding-2022/trees-12.git
   ```
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- APP USAGE -->
+## App Usage
 
-- [x] Add LICENSE
-- [x] Add README
-- [ ] Add Gradle BM
-- [ ] Develop Trees Interfaces
-- [ ] Develop Trees Realisation
-- [ ] Develop User Interface
-- [ ] Develop CI
+- Some tips about app usage.
 
 <p align="right">(<a href="#search-trees-project">Back to top</a>)</p>
 
@@ -135,5 +129,7 @@ The resources that we used to get information about binary search trees, their f
 * [Gradle Documentation](https://docs.gradle.org/current/userguide/userguide.html)
 * [JUnit Documentation](https://junit.org/junit5/docs/current/user-guide/)
 * [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+* [Mergeable Documentation](https://mergeable.readthedocs.io/en/latest/configuration.html#basics)
+* [Compose Documentation](https://developer.android.com/jetpack/compose/documentation)
 
 <p align="right">(<a href="#search-trees-project">Back to top</a>)</p>
