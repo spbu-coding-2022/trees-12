@@ -2,12 +2,15 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
     id("org.jetbrains.kotlin.plugin.noarg") version "1.8.20"
+    id("org.jetbrains.compose") version "1.4.0"
     jacoco
     application
 }
 
 repositories {
     mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    google()
 }
 
 dependencies {
@@ -21,6 +24,9 @@ dependencies {
     implementation("org.neo4j:neo4j-ogm-core:4.0.5")
     implementation("org.neo4j:neo4j-ogm-bolt-driver:4.0.5")
     implementation("org.slf4j:slf4j-simple:2.0.0")
+
+    implementation(compose.desktop.currentOs)
+    implementation(compose.material3)
 
     implementation(project(":BinarySearchTrees"))
 }
