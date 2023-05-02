@@ -11,8 +11,6 @@
     AVL, Red-Black and Binary Search Trees models.
     <br />
     <br />
-    <a href="https://searchtrees.site">View Demo</a>
-    ·
     <a href="https://t.me/kkkebab_boy">Report Bug</a>
     ·
     <a href="https://t.me/ASpectreTG">Request Feature</a>
@@ -71,6 +69,10 @@ Technologies used to develop the project:
 * [![gradle](https://img.shields.io/badge/gradle-FFFFFF?style=for-the-badge&logo=gradle&logoColor=black&)](https://gradle.org/)
 * [![gradle](https://img.shields.io/badge/kotlin-FFFFFF?style=for-the-badge&logo=kotlin&logoColor=black&)](https://kotlinlang.org/)
 * [![gradle](https://img.shields.io/badge/junit-FFFFFF?style=for-the-badge&logo=junit&logoColor=black&)](https://junit.org/)
+* [![gradle](https://img.shields.io/badge/neo4j-FFFFFF?style=for-the-badge&logo=neo4j&logoColor=black&)](https://neo4j.com)
+* [![gradle](https://img.shields.io/badge/sqlite-FFFFFF?style=for-the-badge&logo=sqlite&logoColor=black&)](https://www.sqlite.org/index.html)
+* [![gradle](https://img.shields.io/badge/docker-FFFFFF?style=for-the-badge&logo=docker&logoColor=black&)](https://www.docker.com)
+* [![gradle](https://img.shields.io/badge/compose-FFFFFF?style=for-the-badge&logo=compose&logoColor=black&)](https://www.jetbrains.com/ru-ru/lp/compose-multiplatform/)
 
 <p align="right">(<a href="#search-trees-project">Back to top</a>)</p>
 
@@ -85,6 +87,52 @@ To start working with our development, you need to clone repository:
 
   ```sh
   git clone https://github.com/spbu-coding-2022/trees-12.git
+  ```
+
+To initialize the library and start working with it, you need to know the following lines:
+
+* Initializing BinarySearchTree (default RedBlackTree):
+
+  ```kotlin
+  val tree = binarySearchTreeOf<KeyType, ValueType>()
+  ```
+
+* Initializing simple BinarySearchTree:
+
+  ```kotlin
+  val tree = SimpleBinarySearchTree<KeyType, ValueType>()
+  ```
+
+* Initializing RedBlackTree:
+
+  ```kotlin
+  val tree = RedBlackTree<KeyType, ValueType>()
+  ```
+
+* Initializing AVLTree:
+
+  ```kotlin
+  val tree = AVLTree<KeyType, ValueType>()
+  ```
+
+To work with trees, you also need to know the management commands:
+
+* Inserting a value by key:
+
+  ```kotlin
+  tree[key] = value
+  ```
+
+* Getting a value by key:
+
+  ```kotlin
+  val value = tree[key]
+  ```
+
+* Deleting a value by key:
+
+  ```kotlin
+  tree.remove(key)
   ```
 
 <!-- APP USAGE -->
@@ -131,5 +179,6 @@ The resources that we used to get information about binary search trees, their f
 * [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 * [Mergeable Documentation](https://mergeable.readthedocs.io/en/latest/configuration.html#basics)
 * [Compose Documentation](https://developer.android.com/jetpack/compose/documentation)
+* [Docker Desktop](https://docs.docker.com/desktop/)
 
 <p align="right">(<a href="#search-trees-project">Back to top</a>)</p>
