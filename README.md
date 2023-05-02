@@ -158,7 +158,11 @@ A little bit about the user interface:
 
 * After launching the application, a window will appear in which you can select the desired type of tree, as well as previously saved models of this type.
 
-<img src="https://media.discordapp.net/attachments/760917929126133834/1102882512851701823/image.png?width=1191&height=670" alt="Start" width="400" height="240">
+<img src="https://media.discordapp.net/attachments/760917929126133834/1102882512851701823/image.png?width=1191&height=670" alt="Start" width="640" height="360">
+
+* After you select the tree, a window will appear with functional buttons for adding, deleting and searching for values by key. Also, above the buttons you can see the type of the selected tree, and below them there will be buttons for saving and deleting the current model.
+
+<img src="https://media.discordapp.net/attachments/760917929126133834/1102884142041010206/image.png?width=1191&height=670" alt="Main" width="640" height="360">
 
 <p align="right">(<a href="#search-trees-project">Back to top</a>)</p>
 
