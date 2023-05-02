@@ -39,7 +39,7 @@ fun MainWindow(
     icon: Painter? = painterResource("treeIcon.png"),
     state: WindowState = rememberWindowState(
         position = WindowPosition(alignment = Alignment.Center),
-        size = DpSize(800.dp, 600.dp),
+        size = DpSize(1100.dp, 815.dp),
     )
 ) {
     Window(
@@ -193,7 +193,7 @@ fun Panel(
                     modifier = Modifier.width(260.dp).height(45.dp),
                     shape = RoundedCornerShape(5.dp),
                 ) {
-                    Text(text = "reset positions", style = defaultOnPrimaryLargeTextStyle)
+                    Text(text = "Reset Positions", style = defaultOnPrimaryLargeTextStyle)
                 }
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -202,7 +202,7 @@ fun Panel(
                     modifier = Modifier.width(260.dp).height(45.dp),
                     shape = RoundedCornerShape(5.dp),
                 ) {
-                    Text(text = "save tree", style = defaultOnPrimaryLargeTextStyle)
+                    Text(text = "Save Tree", style = defaultOnPrimaryLargeTextStyle)
                 }
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -211,7 +211,7 @@ fun Panel(
                     modifier = Modifier.width(260.dp).height(45.dp),
                     shape = RoundedCornerShape(5.dp),
                 ) {
-                    Text(text = "delete tree", style = defaultOnPrimaryLargeTextStyle)
+                    Text(text = "Delete Tree", style = defaultOnPrimaryLargeTextStyle)
                 }
             }
         }
@@ -277,7 +277,7 @@ fun TreeTitle(
                 .padding(defaultPadding * 2)
         ) {
             Text(
-                text = treeType,
+                text = treeName,
                 style = defaultOnPrimaryLargeTextStyle,
                 modifier = Modifier.align(Alignment.Center)
             )
@@ -292,8 +292,9 @@ fun TreeTitle(
                 .padding(defaultPadding * 2)
         ) {
             Text(
-                text = treeName,
-                style = defaultLargeTextStyle
+                text = treeType,
+                style = defaultLargeTextStyle,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }
