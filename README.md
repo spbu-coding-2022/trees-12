@@ -138,7 +138,21 @@ To work with trees, you also need to know the management commands:
 <!-- APP USAGE -->
 ## App Usage
 
-- Some tips about app usage.
+Before launching the application, you need to run "neo4j" via "docker":
+
+* This is done by the command in project repository:
+
+```sh
+docker compose up -d
+```
+
+You also need to build the application and run it:
+
+* This is done by the command:
+
+```sh
+./gradlew run
+```
 
 <p align="right">(<a href="#search-trees-project">Back to top</a>)</p>
 
