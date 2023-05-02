@@ -10,11 +10,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
@@ -23,7 +30,9 @@ import binarysearchtrees.BinarySearchTree
 import binarysearchtrees.binarysearchtree.SimpleBinarySearchTree
 import binarysearchtrees.redblacktree.RedBlackTree
 import java.awt.Dimension
+import androidx.compose.material3.MaterialTheme
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun MainWindow(
     tree: BinarySearchTree<String, Position>,
@@ -62,7 +71,25 @@ fun MainWindow(
                                     RoundedCornerShape(10.dp)
                                 )
                         ) {
-                            // logo
+                            Image(
+                                painter = painterResource("treeIcon.png"),
+                                contentDescription = "Logotype",
+                                modifier = Modifier.height(200.dp)
+                                    .width(400.dp)
+                                    .padding(50.dp)
+                            )
+
+                                Text("Trees-12", fontSize = 36.sp,
+                                    modifier = Modifier.padding(top = 175.dp).width(300.dp),
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center)
+
+                                Text("Arsene & Artem", fontSize = 19.sp,
+                                    modifier = Modifier.padding(top = 215.dp).width(300.dp),
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center)
                         }
 
                         Box(
