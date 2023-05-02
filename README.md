@@ -158,7 +158,7 @@ A little bit about the user interface:
 
 * After launching the application, a window will appear in which you can select the desired type of tree, as well as previously saved models of this type.
 
-<img src="https://media.discordapp.net/attachments/760917929126133834/1102882512851701823/image.png?width=1191&height=670" alt="Start" width="400" height="180">
+<img src="https://media.discordapp.net/attachments/760917929126133834/1102882512851701823/image.png?width=1191&height=670" alt="Start" width="400" height="240">
 
 <p align="right">(<a href="#search-trees-project">Back to top</a>)</p>
 
