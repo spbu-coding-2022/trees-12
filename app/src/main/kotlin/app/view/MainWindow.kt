@@ -178,8 +178,8 @@ fun Panel(
 
                 TreeButton("Find") {
                     tree[it]?.let { pos ->
-                        scrollDelta.x = -pos.x
-                        scrollDelta.y = -pos.y
+                        scrollDelta.x = -pos.x + 335.dp
+                        scrollDelta.y = -pos.y + 335.dp
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
