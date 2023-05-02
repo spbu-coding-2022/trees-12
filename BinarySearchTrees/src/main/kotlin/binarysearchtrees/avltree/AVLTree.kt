@@ -1,9 +1,12 @@
 package binarysearchtrees.avltree
 
 import kotlin.math.max
+import kotlin.math.min
 
 open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
-    
+
+    var size: Int = 0
+
     private var root: Vertex<K, V>? = null
 
     init {
@@ -16,7 +19,16 @@ open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
 
     fun isEmpty(): Boolean = (root == null)
 
-    private fun insert(key: K, value: V) {
+    fun clear() {
+        size = 0
+        root = null
+    }
+
+    operator fun set(key: K, value: V) {
+        insert(key, value)
+    }
+
+    fun insert(key: K, value: V) {
         root = add(root, Vertex(key, value, 1))
     }
 
@@ -63,6 +75,7 @@ open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
             return vertex.leftRotate()
         }
 
+        ++size
         return vertex
     }
 
@@ -70,7 +83,7 @@ open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
         delete(key, root)
     }
 
-    private fun delete(key: K, tree: Vertex<K, V>?) {
+    fun delete(key: K, tree: Vertex<K, V>?) {
         if (tree == null) {
             return
         }
@@ -102,7 +115,20 @@ open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
             if (vertex == root && tree == root) root = newNode else parent?.replaceChild(vertex, newNode)
 
             delete(min.key, vertex.right)
+            --size
         }
+    }
+
+    operator fun get(key: K): V? {
+        var vertex = root
+        while (vertex != null && vertex.key != key) {
+            if (vertex.key > key) {
+                vertex = vertex.left
+            } else {
+                vertex = vertex.right
+            }
+        }
+        return vertex?.value
     }
 
     fun search(key: K, visited: ((K) -> Unit)? = null): V? {
@@ -137,8 +163,6 @@ open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
 
         val balance
             get() = leftHeight - rightHeight
-
-        override fun toString() = "$key"
 
         override fun equals(other: Any?) = if (other is Vertex<*, *>) other.key == key else false
 
