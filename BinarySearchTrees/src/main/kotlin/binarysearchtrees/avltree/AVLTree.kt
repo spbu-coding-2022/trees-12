@@ -1,125 +1,32 @@
 package binarysearchtrees.avltree
 
-import kotlin.math.max
-import kotlin.math.min
+import binarysearchtrees.BinarySearchTree
+import binarysearchtrees.MutableVertex
+import binarysearchtrees.avltree.AVLTree
+import binarysearchtrees.avltree.Vertex
+import binarysearchtrees.avltree.Vertex as PublicVertex
 
-open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
+open class AVLTree<K : Comparable<K>, V> : BinarySearchTree<K, V> {
+    final override var size: Int = 0
+        protected set
+    protected var root: AVLVertex<K, V>? = null
+    protected var modCount: Int = 0
 
-    var size: Int = 0
+    override fun isEmpty(): Boolean = (root == null)
 
-    private var root: Vertex<K, V>? = null
-
-    init {
-        init.forEach {
-            insert(it.first, it.second)
-        }
-    }
-
-    fun getRoot(): Vertex<K, V>? = root
-
-    fun isEmpty(): Boolean = (root == null)
-
-    fun clear() {
+    override fun clear() {
         size = 0
         root = null
+        ++modCount
     }
 
-    operator fun set(key: K, value: V) {
-        insert(key, value)
+    override fun getRoot(): PublicVertex<K, V>? = root
+
+    override fun iterator(): Iterator<PublicVertex<K, V>> {
+        return AVLTreeIterator<K, V>(getRoot()) { modCount }
     }
 
-    fun insert(key: K, value: V) {
-        root = add(root, Vertex(key, value, 1))
-    }
-
-    private fun add(vertex: Vertex<K, V>?, newVertex: Vertex<K, V>): Vertex<K, V>? {
-        if (vertex == null) {
-            return newVertex
-        }
-
-        when {
-            newVertex.key < vertex.key -> {
-                vertex.left = add(vertex.left, newVertex)
-            }
-            newVertex.key > vertex.key -> {
-                vertex.right = add(vertex.right, newVertex)
-            }
-        }
-
-        val heightLeft = vertex.leftHeight
-        val heightRight = vertex.rightHeight
-        val balance = vertex.balance
-
-        val leftGreater = balance > 1
-        val rightGreater = balance < -1
-
-        vertex.height = 1 + max(heightLeft, heightRight)
-
-        if (leftGreater && newVertex.key < vertex.left!!.key) {
-            return vertex.rightRotate()
-        }
-
-        if (rightGreater && newVertex.key > vertex.right!!.key) {
-            return vertex.leftRotate()
-        }
-
-        if (leftGreater && newVertex.key > vertex.left!!.key) {
-            vertex.left = vertex.left!!.leftRotate()
-
-            return vertex.rightRotate()
-        }
-
-        if (rightGreater && newVertex.key < vertex.right!!.key) {
-            vertex.right = vertex.right!!.rightRotate()
-
-            return vertex.leftRotate()
-        }
-
-        ++size
-        return vertex
-    }
-
-    fun delete(key: K) {
-        delete(key, root)
-    }
-
-    fun delete(key: K, tree: Vertex<K, V>?) {
-        if (tree == null) {
-            return
-        }
-
-        val visited = mutableListOf<Vertex<K, V>>()
-        val vertex = search(key, tree) {
-            visited.add(it)
-        } ?: return
-
-        val parent = when {
-            visited.size >= 2 -> visited.elementAt(visited.size - 2)
-            vertex == tree -> tree
-            else -> null
-        }
-
-        if (vertex.left == null && vertex.right == null) {
-            if (vertex == root && tree == root) root = null else parent?.removeChild(vertex)
-        } else if (vertex.left == null) {
-            if (vertex == root && tree == root) root = vertex.right else parent?.replaceChild(vertex, vertex.right)
-        } else if (vertex.right == null) {
-            if (vertex == root && tree == root) root = vertex.left else parent?.replaceChild(vertex, vertex.left)
-        } else {
-            val min = vertex.right!!.min()
-            val newNode = Vertex(min.key, min.value, vertex.height)
-            newNode.left = vertex.left
-            newNode.right = vertex.right
-            newNode.height = vertex.height - 1
-
-            if (vertex == root && tree == root) root = newNode else parent?.replaceChild(vertex, newNode)
-
-            delete(min.key, vertex.right)
-            --size
-        }
-    }
-
-    operator fun get(key: K): V? {
+    override fun get(key: K): V? {
         var vertex = root
         while (vertex != null && vertex.key != key) {
             if (vertex.key > key) {
@@ -131,95 +38,233 @@ open class AVLTree<K : Comparable<K>, V>(vararg init: Pair<K, V>) {
         return vertex?.value
     }
 
-    fun search(key: K, visited: ((K) -> Unit)? = null): V? {
-        return search(key, root) { visited?.invoke(it.key) }?.value
+    override fun put(key: K, value: V): V? {
+        var new = false
+        var vertex: AVLVertex<K, V> = root ?: AVLVertex(key, value).also {
+            root = it
+            new = true
+        }
+        while (vertex.key != key) {
+            if (vertex.key > key) {
+                vertex = vertex.left ?: AVLVertex(key, value).also {
+                    vertex.left = it
+                    new = true
+                }
+            } else {
+                vertex = vertex.right ?: AVLVertex(key, value).also {
+                    vertex.right = it
+                    new = true
+                }
+            }
+        }
+        return if (new) {
+            ++size
+            ++modCount
+            balanceUp(vertex)
+            null
+        } else vertex.setValue(value)
     }
 
-    private fun search(key: K, vertex: Vertex<K, V>?, visited: ((Vertex<K, V>) -> Unit)? = null): Vertex<K, V>? {
-        if (vertex == null) {
+    override operator fun set(key: K, value: V) {
+        put(key, value)
+    }
+
+    override fun remove(key: K): V? {
+        var parent: AVLVertex<K, V>? = null
+        var vertex = root
+        while (vertex != null && vertex.key != key) {
+            parent = vertex
+            if (vertex.key > key) {
+                vertex = vertex.left
+            } else {
+                vertex = vertex.right
+            }
+        }
+        val oldValue = vertex?.value
+        if (vertex != null) {
+            if (parent == null) {
+                root = removeVertex(vertex)
+            } else {
+                if (parent.left == vertex) {
+                    parent.left = removeVertex(vertex)
+                } else {
+                    parent.right = removeVertex(vertex)
+                }
+            }
+            --size
+            ++modCount
+        }
+        return oldValue
+    }
+
+    override fun remove(key: K, value: V): Boolean {
+        var parent: AVLVertex<K, V>? = null
+        var vertex = root
+        while (vertex != null && vertex.key != key) {
+            parent = vertex
+            if (vertex.key > key) {
+                vertex = vertex.left
+            } else {
+                vertex = vertex.right
+            }
+        }
+        return if (vertex?.value == value) {
+            if (parent == null) {
+                root = vertex?.let { removeVertex(it) }
+            } else {
+                if (parent.left == vertex) {
+                    parent.left = vertex?.let { removeVertex(it) }
+                } else {
+                    parent.right = vertex?.let { removeVertex(it) }
+                }
+            }
+            --size
+            ++modCount
+            true
+        } else false
+    }
+
+    private fun removeVertex(vertex: AVLVertex<K, V>): AVLVertex<K, V>? {
+        if (vertex.left == null && vertex.right == null) {
             return null
+        } else if (vertex.left == null) {
+            return vertex.right
+        } else if (vertex.right == null) {
+            return vertex.left
         }
 
-        visited?.let { it(vertex) }
+        val successor = findMin(vertex.right!!)
+        vertex.key = successor.key
+        vertex.value = successor.value
+        vertex.right = removeVertex(successor)
 
-        if (key < vertex.key) {
-            return search(key, vertex.left, visited)
-        } else if (key > vertex.key) {
-            return search(key, vertex.right, visited)
-        }
+        balanceUp(vertex)
 
         return vertex
     }
 
-    open class Vertex<K : Comparable<K>, V>(val key: K, val value: V, var height: Int) {
-        var left: Vertex<K, V>? = null
-        var right: Vertex<K, V>? = null
-
-        val leftHeight
-            get() = left?.height ?: 0
-
-        val rightHeight
-            get() = right?.height ?: 0
-
-        val balance
-            get() = leftHeight - rightHeight
-
-        override fun equals(other: Any?) = if (other is Vertex<*, *>) other.key == key else false
-
-        private fun updateHeight() {
-            height = 1 + max(leftHeight, rightHeight)
+    private fun findMin(vertex: AVLVertex<K, V>): AVLVertex<K, V> {
+        var current = vertex
+        while (current.left != null) {
+            current = current.left!!
         }
-
-        fun leftRotate(): Vertex<K, V>? {
-            val other = right ?: return this
-
-            other.left = this.also { it.right = other.left }
-
-            updateHeight()
-            other.updateHeight()
-
-            return other
-        }
-
-        fun rightRotate(): Vertex<K, V>? {
-            val other = this.left ?: return this
-
-            other.right = this.also { it.left = other.right }
-
-            updateHeight()
-            other.updateHeight()
-
-            return other
-        }
-
-        fun removeChild(vertex: Vertex<K, V>) {
-            if (right == vertex) {
-                right = null
-            } else if (left == vertex) {
-                left = null
-            }
-        }
-
-        fun replaceChild(vertex: Vertex<K, V>, with: Vertex<K, V>?) {
-            if (right == vertex) {
-                right = with
-            } else if (left == vertex) {
-                left = with
-            }
-        }
-
-        fun min(): Vertex<K, V> {
-            return if (left == null) {
-                this
-            } else {
-                left!!.min()
-            }
-        }
-
-        override fun hashCode() = key.hashCode()
+        return current
     }
-}
 
-fun <K : Comparable<K>, V> AVLTree(items: Map<K, V>): AVLTree<K, V> {
-    return AVLTree(*items.map { Pair(it.key, it.value) }.toTypedArray())
+    private fun balanceUp(vertex: AVLVertex<K, V>) {
+        var current: AVLVertex<K, V>? = vertex
+
+        while (current != null) {
+            val balanceFactor = getBalanceFactor(current)
+            if (balanceFactor > 1) {
+                if (getBalanceFactor(current.left!!) >= 0) {
+                    current = rotateRight(current)
+                } else {
+                    current.left = rotateLeft(current.left!!)
+                    current = rotateRight(current)
+                }
+            } else if (balanceFactor < -1) {
+                if (getBalanceFactor(current.right!!) <= 0) {
+                    current = rotateLeft(current)
+                } else {
+                    current.right = rotateRight(current.right!!)
+                    current = rotateLeft(current)
+                }
+            }
+            current = current.parent
+        }
+    }
+
+    private fun rotateLeft(vertex: AVLVertex<K, V>): AVLVertex<K, V> {
+        val rightChild = vertex.right!!
+        vertex.right = rightChild.left
+        rightChild.left?.parent = vertex
+        rightChild.left = vertex
+        rightChild.parent = vertex.parent
+        vertex.parent = rightChild
+
+        updateHeight(vertex)
+        updateHeight(rightChild)
+
+        return rightChild
+    }
+
+    private fun rotateRight(vertex: AVLVertex<K, V>): AVLVertex<K, V> {
+        val leftChild = vertex.left!!
+        vertex.left = leftChild.right
+        leftChild.right?.parent = vertex
+        leftChild.right = vertex
+        leftChild.parent = vertex.parent
+        vertex.parent = leftChild
+
+        updateHeight(vertex)
+        updateHeight(leftChild)
+
+        return leftChild
+    }
+
+    private fun updateHeight(vertex: AVLVertex<K, V>) {
+        val leftHeight = getHeight(vertex.left)
+        val rightHeight = getHeight(vertex.right)
+        vertex.height = 1 + maxOf(leftHeight, rightHeight)
+    }
+
+    private fun getBalanceFactor(vertex: AVLVertex<K, V>): Int {
+        val leftHeight = getHeight(vertex.left)
+        val rightHeight = getHeight(vertex.right)
+        return leftHeight - rightHeight
+    }
+
+    private fun getHeight(vertex: AVLVertex<K, V>?): Int {
+        return vertex?.height ?: 0
+    }
+
+    protected class AVLVertex<K, V>(
+            override var key: K,
+            override var value: V,
+            override var left: AVLVertex<K, V>? = null,
+            override var right: AVLVertex<K, V>? = null,
+            var parent: AVLVertex<K, V>? = null,
+            var height: Int = 1
+    ) : PublicVertex<K, V> {
+        override fun setValue(newValue: V): V = value.also { value = newValue }
+    }
+
+    protected class AVLTreeIterator<K, V>(
+            root: PublicVertex<K, V>?,
+            private val getModCount: () -> Int
+    ) : Iterator<PublicVertex<K, V>> {
+        private val stack: MutableList<PublicVertex<K, V>> = mutableListOf()
+        private val expectedModCount: Int = getModCount()
+
+        init {
+            var vertex = root
+            while (vertex != null) {
+                stack.add(vertex)
+                vertex = vertex.left
+            }
+        }
+
+        override fun hasNext(): Boolean {
+            if (expectedModCount != getModCount()) {
+                throw ConcurrentModificationException()
+            } else {
+                return stack.isNotEmpty()
+            }
+        }
+
+        override fun next(): PublicVertex<K, V> {
+            if (expectedModCount != getModCount()) {
+                throw ConcurrentModificationException()
+            } else {
+                val vertex = stack.removeLast()
+                var nextVertex = vertex.right
+                while (nextVertex != null) {
+                    stack.add(nextVertex)
+                    nextVertex = nextVertex.left
+                }
+                return vertex
+            }
+        }
+    }
 }
