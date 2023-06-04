@@ -55,7 +55,7 @@ fun VertexView(
                 CircleShape
             )
             .border(5.dp, brush, CircleShape)
-            .pointerInput(Unit) {
+            .pointerInput(vertex) {
                 detectDragGestures { change, dragAmount ->
                     change.consume()
                     vertex.value.x += dragAmount.x.toDp()
@@ -97,7 +97,7 @@ private fun VertexText(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = if (text.length < 6) text else (text.drop(text.length - 4) + ".."),
+        text = if (text.length < 6) text else (text.dropLast(text.length - 4) + ".."),
         modifier = modifier,
         style = defaultTextStyle
     )
