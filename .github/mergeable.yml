@@ -1,0 +1,29 @@
+version: 2
+mergeable:
+  - when: pull_request.*, pull_request_review.*
+    filter:
+      - do: payload
+        pull_request:
+          title:
+            must_exclude:
+              regex: ^Feedback$
+              regex_flag: none
+    validate:
+      - do: title
+        no_empty:
+          enabled: true
+          message: "The title should not be empty."
+        begins_with:
+          match: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+          message: "The name must begin with a capital letter."
+
+      - do: description
+        no_empty:
+          enabled: true
+          message: "The description should not be empty."
+
+      - do: approvals
+        min:
+          count: 1
+        required:
+          assignees: true
