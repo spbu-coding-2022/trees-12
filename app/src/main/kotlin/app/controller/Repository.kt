@@ -12,9 +12,9 @@ import binarysearchtrees.avltree.AVLTree
 import org.neo4j.ogm.config.Configuration
 
 class Repository() {
-    private lateinit var bstRepo: BSTRepository<Position>
-    private lateinit var rbtRepo: RBTRepository<Position>
-    private lateinit var avlRepo: AVLRepository<Position>
+    private var bstRepo: BSTRepository<Position>
+    private var rbtRepo: RBTRepository<Position>
+    private var avlRepo: AVLRepository<Position>
 
     init {
         try {

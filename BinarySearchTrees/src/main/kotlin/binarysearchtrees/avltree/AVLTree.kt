@@ -1,7 +1,6 @@
 package binarysearchtrees.avltree
 
 import binarysearchtrees.BinarySearchTree
-import binarysearchtrees.binarysearchtree.Vertex
 import binarysearchtrees.avltree.Vertex as PublicVertex
 import java.util.ConcurrentModificationException
 

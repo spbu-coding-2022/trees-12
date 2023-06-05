@@ -24,6 +24,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.rememberWindowState
+import app.controller.Repository
 import binarysearchtrees.BinarySearchTree
 import binarysearchtrees.binarysearchtree.SimpleBinarySearchTree
 import binarysearchtrees.redblacktree.RedBlackTree
@@ -178,8 +179,8 @@ fun Panel(
 
                 TreeButton("Find") {
                     tree[it]?.let { pos ->
-                        scrollDelta.x = -pos.x + 335.dp
-                        scrollDelta.y = -pos.y + 335.dp
+                        scrollDelta.x = -pos.x + 0.dp
+                        scrollDelta.y = -pos.y + 0.dp
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
@@ -198,15 +199,7 @@ fun Panel(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
-                    onClick = {
-                              if (tree == SimpleBinarySearchTree<String, Position>()) {
-                                  TODO()
-                              } else if (tree == RedBlackTree<String, Position>()) {
-                                  TODO()
-                              } else {
-
-                              }
-                    },
+                    onClick = { TODO() },
                     modifier = Modifier.width(260.dp).height(45.dp),
                     shape = RoundedCornerShape(5.dp),
                 ) {
@@ -215,15 +208,7 @@ fun Panel(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
-                    onClick = {
-                        if (tree == SimpleBinarySearchTree<String, Position>()) {
-                            TODO()
-                        } else if (tree == RedBlackTree<String, Position>()) {
-                            TODO()
-                        } else {
-
-                        }
-                    },
+                    onClick = { TODO() },
 
                     modifier = Modifier.width(260.dp).height(45.dp),
                     shape = RoundedCornerShape(5.dp),
