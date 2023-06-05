@@ -128,7 +128,21 @@ fun SelectionWindow(
                                         )
                                     }
                                 }
-                                // AVL Tree
+                                Row() {
+                                    RadioButton(
+                                            selected = (indicator == 3),
+                                            onClick = { indicator = 3 }
+                                    )
+                                    Box(
+                                            modifier = Modifier.height(45.dp).width(245.dp)
+                                                    .padding(top = defaultPadding * 2, bottom = defaultPadding * 2)
+                                    ) {
+                                        Text(
+                                                text = "AVL Tree",
+                                                style = defaultLargeTextStyle
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -149,8 +163,8 @@ fun SelectionWindow(
                         Box(Modifier.padding(top = 60.dp).fillMaxWidth().height(550.dp)) {
                             when (indicator) {
                                 1 -> Selection({getNames(Repository.TreeType.BST)}, {onOpenRequest(it, Repository.TreeType.BST)})
-                                2 -> Selection({getNames(Repository.TreeType.BST)}, {onOpenRequest(it, Repository.TreeType.BST)})
-                                //3 -> AVLSelection
+                                2 -> Selection({getNames(Repository.TreeType.RBT)}, {onOpenRequest(it, Repository.TreeType.RBT)})
+                                3 -> Selection({getNames(Repository.TreeType.AVL)}, {onOpenRequest(it, Repository.TreeType.AVL)})
                             }
                         }
                     }

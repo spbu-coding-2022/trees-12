@@ -2,16 +2,19 @@ package app.controller
 
 import app.model.repos.BSTRepository
 import app.model.repos.RBTRepository
+import app.model.repos.AVLRepository
 import app.view.Position
 import app.view.ScrollDelta
 import binarysearchtrees.BinarySearchTree
 import binarysearchtrees.binarysearchtree.SimpleBinarySearchTree
 import binarysearchtrees.redblacktree.RedBlackTree
+import binarysearchtrees.avltree.AVLTree
 import org.neo4j.ogm.config.Configuration
 
 class Repository() {
     private lateinit var bstRepo: BSTRepository<Position>
     private lateinit var rbtRepo: RBTRepository<Position>
+    private lateinit var avlRepo: AVLRepository<Position>
 
     init {
         try {
@@ -38,6 +41,17 @@ class Repository() {
         } catch (e: Exception) {
             throw Exception("RBTRepo Init Exception: " + e.message)
         }
+
+        try {
+            val dirPath = "./AVLRepo"
+            avlRepo = AVLRepository(
+                    dirPath,
+                    { serializePosition(it) },
+                    { deserializePosition(it) }
+            )
+        } catch (e: Exception) {
+            throw Exception("AVLRepo Init Exception: " + e.message)
+        }
     }
 
     fun getNames(treeType: TreeType): List<String> {
@@ -59,7 +73,11 @@ class Repository() {
             }
 
             else -> {
-                TODO("Not implemented yet")
+                try {
+                    avlRepo.getNames()
+                } catch (e: Exception) {
+                    throw Exception("AVLRepo GetNames Exception: " + e.message)
+                }
             }
         }
     }
@@ -84,8 +102,12 @@ class Repository() {
                 }
             }
 
-            else -> {
-                TODO("Not implemented yet")
+            is AVLTree<String, Position> -> {
+                try {
+                    avlRepo.set(name, tree, settingsData)
+                } catch (e: Exception) {
+                    throw Exception("AVLRepo Save Exception: " + e.message)
+                }
             }
         }
     }
@@ -108,8 +130,12 @@ class Repository() {
                 }
             }
 
-            else -> {
-                TODO("Not implemented yet")
+            TreeType.AVL -> {
+                try {
+                    avlRepo.get(name)
+                } catch (e: Exception) {
+                    throw Exception("AVLRepo Get Exception: " + e.message)
+                }
             }
         }
         return Pair(tree, deserializeScrollDelta(settingsData))
@@ -133,9 +159,15 @@ class Repository() {
                 }
             }
 
-            else -> {
-                TODO("Not implemented yet")
+            is AVLTree<String, Position> -> {
+                try {
+                    avlRepo.remove(name)
+                } catch (e: Exception) {
+                    throw Exception("AVLRepo Delete Exception: " + e.message)
+                }
             }
+
+            else -> { throw Exception("Undefined tree type.") }
         }
     }
 

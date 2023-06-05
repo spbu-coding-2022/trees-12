@@ -5,10 +5,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
-import app.view.MainWindow
-import app.view.Position
-import app.view.defaultVertexSize
-import app.view.setTreePositions
+import app.controller.Repository
+import app.view.*
 import binarysearchtrees.binarysearchtree.SimpleBinarySearchTree
 import binarysearchtrees.redblacktree.RedBlackTree
 import binarysearchtrees.avltree.AVLTree

@@ -198,7 +198,15 @@ fun Panel(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
-                    onClick = { TODO() },
+                    onClick = {
+                              if (tree == SimpleBinarySearchTree<String, Position>()) {
+                                  TODO()
+                              } else if (tree == RedBlackTree<String, Position>()) {
+                                  TODO()
+                              } else {
+
+                              }
+                    },
                     modifier = Modifier.width(260.dp).height(45.dp),
                     shape = RoundedCornerShape(5.dp),
                 ) {
@@ -207,7 +215,16 @@ fun Panel(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
-                    onClick = { TODO() },
+                    onClick = {
+                        if (tree == SimpleBinarySearchTree<String, Position>()) {
+                            TODO()
+                        } else if (tree == RedBlackTree<String, Position>()) {
+                            TODO()
+                        } else {
+
+                        }
+                    },
+
                     modifier = Modifier.width(260.dp).height(45.dp),
                     shape = RoundedCornerShape(5.dp),
                 ) {

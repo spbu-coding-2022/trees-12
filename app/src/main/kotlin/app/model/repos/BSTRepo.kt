@@ -24,7 +24,7 @@ class BSTRepository<ValueType>(
     }
 
     fun get(name: String): Pair<SimpleBinarySearchTree<String, ValueType>, String> {
-        val jsonTree = Json.decodeFromString<JsonTree>(File(dirPath, "$name.json").readText())
+        val jsonTree = Json.decodeFromString<AVLJsonTree>(File(dirPath, "$name.json").readText())
         return BST<ValueType>().apply {
             jsonTree.root?.let { buildTree(it, deserializeValue) }
         } to jsonTree.settingsData
@@ -33,13 +33,13 @@ class BSTRepository<ValueType>(
     fun set(name: String, tree: SimpleBinarySearchTree<String, ValueType>, settingsData: String) {
         val file = File(dirPath, "$name.json")
         file.createNewFile()
-        file.writeText(Json.encodeToString(JsonTree(settingsData, tree.getRoot()?.toJsonNode(serializeValue))))
+        file.writeText(Json.encodeToString(AVLJsonTree(settingsData, tree.getRoot()?.toJsonNode(serializeValue))))
     }
 
     fun remove(name: String): Boolean = File(dirPath, "$name.json").delete()
 
-    private fun Vertex<String, ValueType>.toJsonNode(serializeValue: (ValueType) -> String): JsonVertex {
-        return JsonVertex(
+    private fun Vertex<String, ValueType>.toJsonNode(serializeValue: (ValueType) -> String): AVLJsonVertex {
+        return AVLJsonVertex(
             key,
             serializeValue(value),
             left?.toJsonNode(serializeValue),
@@ -51,23 +51,23 @@ class BSTRepository<ValueType>(
 @Serializable
 data class JsonTree(
     val settingsData: String,
-    val root: JsonVertex?
+    val root: AVLJsonVertex?
 )
 
 @Serializable
 data class JsonVertex(
-    val key: String,
-    val value: String,
-    val left: JsonVertex?,
-    val right: JsonVertex?,
+        val key: String,
+        val value: String,
+        val left: AVLJsonVertex?,
+        val right: AVLJsonVertex?,
 )
 
 private class BST<ValueType> : SimpleBinarySearchTree<String, ValueType>() {
-    fun buildTree(jsonVertex: JsonVertex, deserializeValue: (String) -> ValueType) {
+    fun buildTree(jsonVertex: AVLJsonVertex, deserializeValue: (String) -> ValueType) {
         root = jsonVertex.toVertex(deserializeValue)
     }
 
-    private fun JsonVertex.toVertex(deserializeValue: (String) -> ValueType): Vertex<String, ValueType> {
+    private fun AVLJsonVertex.toVertex(deserializeValue: (String) -> ValueType): Vertex<String, ValueType> {
         val vertex = Vertex(key, deserializeValue(value))
         ++size
         ++modCount
