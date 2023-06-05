@@ -26,11 +26,11 @@ val defaultVVBrush
 
 val defaultBlackBrush
     @Composable
-    get() = Brush.linearGradient(listOf(Color.Black, Color.Black))
+    get() = Brush.linearGradient(listOf(Color(153, 0, 204), Color(153, 0, 204)))
 
 val defaultRedBrush
     @Composable
-    get() = Brush.linearGradient(listOf(Color(139, 0, 0), Color(139, 0, 0)))
+    get() = Brush.linearGradient(listOf(Color(255, 51, 255), Color(255, 51, 255)))
 
 val defaultEdgeColor
     @Composable

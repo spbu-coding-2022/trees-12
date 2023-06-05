@@ -11,6 +11,7 @@ import app.view.defaultVertexSize
 import app.view.setTreePositions
 import binarysearchtrees.binarysearchtree.SimpleBinarySearchTree
 import binarysearchtrees.redblacktree.RedBlackTree
+import binarysearchtrees.avltree.AVLTree
 
 fun main() {
     application {
@@ -23,7 +24,7 @@ fun main() {
             )
         ) {
             //
-            val tree = RedBlackTree<String, Position>()
+            val tree = AVLTree<String, Position>()
             tree["1"] = Position(0.dp, 0.dp)
             tree["2"] = Position(0.dp, 0.dp)
             tree["3"] = Position(0.dp, 0.dp)
